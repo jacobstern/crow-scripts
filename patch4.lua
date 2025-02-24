@@ -1,10 +1,10 @@
---- Patch 4
+--- patch 4
 presets = {
   [1] = {
     volts = {0, 5, 0, 5},
     route = {
-      {1, 0, 0, 1, 0, 1},
-      {0, 0, 1, 0, 0, 0},
+      {1, 0, 0, 0, 1, 0},
+      {0, 0, 0, 1, 0, 0},
     }
   },
   [2] = {
@@ -34,7 +34,7 @@ function print_preset(p)
       if p.route[i][j] == 1 then
         r = r .. "X"
       else
-        r = r .. "O"
+        r = r .. ","
       end
     end
     print(r)
@@ -68,18 +68,19 @@ function init()
   for i = 1,2 do
     input[i]{
       mode = 'change',
-      direction = 'both'
+      direction = 'both',
+      threshold = 2,
     }
   end
 
-  if default_preset then
+  if default_preset > 0 then
     preset(default_preset)
   end
 end
 
 function trigger_high(i)
   for j = 1,6 do
-    if route[i][j] == 1 then
+    if route[i][j] == 1 and held_note[j] == 0 then
       ii.jf.trigger(j, 1)
       held_note[j] = i
     end
