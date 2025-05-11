@@ -8,7 +8,7 @@ count = 0
 trans_frequency = 1
 
 function init()
-  ii.wdel.mix(-4.7)
+  ii.wdel.mix(-4.8)
   ii.wdel.feedback(-3)
   ii.wdel.filter(100)
   ii.wdel.time(0.5)
