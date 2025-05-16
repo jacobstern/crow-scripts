@@ -1,33 +1,22 @@
 -- logic.lua
 
 s = sequins
-ws = ii.wsyn
-
-vseq = s{5, 3, 4, 5, 3.5}
-transpose = {0, 1, 5/12, 1}
-chord = {nil, nil, nil}
-
-function play_synth()
-  volts = vseq()
-  t = transpose[math.random(#transpose)]
-  note = input[2].volts 
-  ws.play_note(note + t, volts)
-end
-
-function trigger(on)
-  if on then
-    play_synth()
-  end
-end
+ins = {false, false}
 
 function init()
   output[1](lfo(15))
+  output[3].volts = 5
 
-  input[1].mode('change', 2.0)
-  input[1].change = trigger
-
-  ws.fm_index(1.5)
-  ws.fm_ratio(2)
-  ws.ar_mode(1)
-  ws.lpg_time(-2)
+  for i=1,2 do
+    input[i].mode('change', 2.0)
+    input[i].change = function (on)
+      ins[i] = on
+      xor = ins[1] ~= ins[2]
+      if xor then
+        output[2].volts = 8
+      else
+        output[2].volts = 0
+      end
+    end
+  end
 end
